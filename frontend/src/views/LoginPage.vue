@@ -79,6 +79,7 @@ export default {
         });
         console.info(response);
         this.isSuccess = true
+        localStorage.setItem("token", response.data.data.token)
         router.replace('/home')
       } catch (error) {
         console.info(error.response.data.errors);

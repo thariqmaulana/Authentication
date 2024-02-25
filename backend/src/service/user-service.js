@@ -1,6 +1,6 @@
 import { prismaClient } from "../application/database.js";
 import { ErrorResponse } from "../error/error-response.js";
-import { loginUserValidation, registerUserValidation } from "../validation/user-validation.js";
+import { loginUserValidation, logoutUserValidation, registerUserValidation } from "../validation/user-validation.js";
 import { validate } from "../validation/validation.js";
 import bcrypt from "bcrypt"
 import {v4 as uuid} from "uuid"
@@ -70,7 +70,33 @@ const login = async (request) => {
   })
 }
 
+const logout = async (username) => {
+  username = validate(logoutUserValidation, username);
+
+  const user = await prismaClient.user.findUnique({
+    where: {
+      username: username
+    }
+  });
+
+  if (!user) {
+    throw new ErrorResponse(404, "User is not found");
+  }
+
+  return await prismaClient.user.update({
+    where: {
+      username: username
+    },
+    data: {
+      token: null
+    },
+    select: false
+  });
+
+}
+
 export default {
   register,
-  login
+  login,
+  logout
 }

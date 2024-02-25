@@ -54,6 +54,9 @@
       </div>
     </div>
   </form>
+  <div>
+    {{ message }}
+  </div>
 </template>
 
 <script>
@@ -71,6 +74,7 @@ export default {
       inputUsername: '',
       inputPassword: '',
       inputName: '',
+      message: ''
     };
   },
   methods: {
@@ -85,7 +89,7 @@ export default {
         router.replace('/')
       } catch (error) {
         console.info(error)
-        // console.info(error.response.data.errors);
+        console.info(error.response.data.errors);
       }
     },
   },
